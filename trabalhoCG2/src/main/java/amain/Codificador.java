@@ -10,7 +10,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 public class Codificador {
 	static final int TEXT_MAX = 225;
 	
-	//teste
+	//testing
 
 	public static String readFromImage(String path, JProgressBar progressBar) {
 		path = relativizePath(path);
