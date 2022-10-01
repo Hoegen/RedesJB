@@ -16,7 +16,7 @@ public class Player {
 		score = 0;
 		this.id = id;
 		this.name = name;
-		racket = new Racket();
+		racket = new Racket(this);
 		
 		switch(id) {
 			case (0):

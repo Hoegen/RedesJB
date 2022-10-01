@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
@@ -22,15 +23,13 @@ public class ClientWindow extends JFrame {
 		super.add(contents);
 		super.setTitle("PONGIO");
 		contents.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
-		//super.setSize();
+		
+		super.setBackground(Color.BLACK);
 		super.setLocation(UserProperties.getScrWid()/2 - WINDOW_WIDTH/2, UserProperties.getScrHei()/2 - WINDOW_HEIGHT/2);
 		super.setResizable(false);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		super.pack();
+		
 		super.setVisible(true);
-	}
-	
-	public static void main(String[] args) {
-		new ClientWindow();
 	}
 }

@@ -17,4 +17,10 @@ public class Ball extends GraphicObject {
 		g.drawOval(Math.round(xpos) - DIAMETER/2, Math.round(ypos) - DIAMETER/2, DIAMETER, DIAMETER);
 	}
 
+	@Override
+	public void move() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -7,6 +7,9 @@ public abstract class GraphicObject {
 	protected float xpos;
 	protected float ypos;
 	protected float tilt;
+	protected float speed;
+	
+	public abstract void move();
 	
 	public abstract void draw(Graphics g);
 	
