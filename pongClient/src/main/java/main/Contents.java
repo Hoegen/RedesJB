@@ -3,13 +3,12 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 //import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import game.Ball;
 import game.GraphicObject;
 import game.Match;
 
@@ -26,8 +25,9 @@ public class Contents extends JPanel {
 	public Contents(Match match) {
 		setCurrentmatch(match);
 		
-		this.addKeyListener(new ActionListener());
+		this.setBackground(Color.BLACK);
 		
+		drawlist.add(match);
 		drawlist.add(match.getBall());
 		
 		for(int i = 0; i < match.getPlayerlist().size(); i++) {
@@ -35,12 +35,12 @@ public class Contents extends JPanel {
 		}
 		
 		new Thread(()-> run()).start();
-		
 		super.setDoubleBuffered(true);
 	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		
 		g.setColor(Color.white);
 		for(GraphicObject go : drawlist) {
@@ -61,24 +61,40 @@ public class Contents extends JPanel {
 			tickdelta += (now -lastTime)/ns;
 			lastTime = now;
 			if(tickdelta > 1) {
-				move();
 				checkCollision();
+				move();
 				repaint();
 				tickdelta--;
-				System.out.println("tick amount = " + tickdelta );
 			}
 		}
 	}
 
 	private void move() {
-		for(GraphicObject go : drawlist) {
-			go.move();
+		for(int i = 0; i < drawlist.size(); i++) {
+			drawlist.get(i).move();
+			
+			if(drawlist.get(i).getClass().equals(Ball.class) && ((Ball)drawlist.get(i)).getSpeed() > 0) {
+				Ball nball = new Ball();
+				nball.setSpeed(0);
+				nball.setXpos(drawlist.get(i).getXpos());
+				nball.setYpos(drawlist.get(i).getYpos());
+				drawlist.add(nball);
+			}
+			
 		}
+		
+//		for(GraphicObject go : drawlist) {
+//			go.move();
+//		}
 	}
 
 	private void checkCollision() {
-		// TODO Auto-generated method stub
-		
+		for(int i = 0; i < drawlist.size(); i++) {
+			for(int j = i + 1; j < drawlist.size(); j++) {
+				drawlist.get(i).checkCollision(drawlist.get(j));
+				drawlist.get(j).checkCollision(drawlist.get(i));
+			}
+		}
 	}
 
 	public Match getCurrentmatch() {
@@ -87,58 +103,5 @@ public class Contents extends JPanel {
 
 	public void setCurrentmatch(Match currentmatch) {
 		this.currentmatch = currentmatch;
-	}
-	
-	
-	public static class KeysPressed{
-		public static boolean A = false;
-		public static boolean Z = false;
-		public static boolean L = false;
-		public static boolean comma = false;
-		
-	}
-	
-	public class ActionListener implements KeyListener {
-
-		@Override
-		public void keyTyped(KeyEvent e) { //do nothing
-		}
-
-		@Override
-		public void keyPressed(KeyEvent e) {
-			switch (e.getKeyCode()) {
-				case KeyEvent.VK_A:
-					KeysPressed.A = true;
-					break;
-				case KeyEvent.VK_Z:
-					KeysPressed.Z = true;
-					break;
-				case KeyEvent.VK_L:
-					KeysPressed.L = true;
-					break;
-				case KeyEvent.VK_COMMA:
-					KeysPressed.comma = true;
-					break;
-			}
-		}
-
-		@Override
-		public void keyReleased(KeyEvent e) {
-			switch (e.getKeyCode()) {
-				case KeyEvent.VK_A:
-					KeysPressed.A =false;
-					break;
-				case KeyEvent.VK_Z:
-					KeysPressed.Z =false;
-					break;
-				case KeyEvent.VK_L:
-					KeysPressed.L =false;
-					break;
-				case KeyEvent.VK_COMMA:
-					KeysPressed.comma =false;
-					break;
-			}
-		}
-
 	}
 }

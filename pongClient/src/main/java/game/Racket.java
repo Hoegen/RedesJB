@@ -2,7 +2,7 @@ package game;
 
 import java.awt.Graphics;
 
-import main.Contents;
+import main.ClientWindow;
 
 public class Racket extends GraphicObject {
 	private int width;
@@ -72,24 +72,31 @@ public class Racket extends GraphicObject {
 
 	@Override
 	public void move() {
+		
 		switch (player.getId()) {
 			case 0:
-				if(Contents.KeysPressed.A) {
+				if(ClientWindow.KeysPressed.A) {
 					ypos -= speed;
 				}
-				if(Contents.KeysPressed.Z) {
+				if(ClientWindow.KeysPressed.Z) {
 					ypos += speed;
 				}
 				break;
 
 			case 1:
-				if(Contents.KeysPressed.L) {
+				if(ClientWindow.KeysPressed.L) {
 					ypos -= speed;
 				}
-				if(Contents.KeysPressed.comma) {
+				if(ClientWindow.KeysPressed.comma) {
 					ypos += speed;
 				}
 				break;
 		}
+	}
+
+	@Override
+	public void checkCollision(GraphicObject other) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -31,5 +31,7 @@ public abstract class GraphicObject {
 	public void setTilt(float tilt) {
 		this.tilt = tilt;
 	}
+
+	public abstract void checkCollision(GraphicObject other);
 	
 }
