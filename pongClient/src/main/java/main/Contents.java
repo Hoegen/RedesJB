@@ -70,22 +70,9 @@ public class Contents extends JPanel {
 	}
 
 	private void move() {
-		for(int i = 0; i < drawlist.size(); i++) {
-			drawlist.get(i).move();
-			
-			if(drawlist.get(i).getClass().equals(Ball.class) && ((Ball)drawlist.get(i)).getSpeed() > 0) {
-				Ball nball = new Ball();
-				nball.setSpeed(0);
-				nball.setXpos(drawlist.get(i).getXpos());
-				nball.setYpos(drawlist.get(i).getYpos());
-				drawlist.add(nball);
-			}
-			
+		for(GraphicObject go : drawlist) {
+			go.move();
 		}
-		
-//		for(GraphicObject go : drawlist) {
-//			go.move();
-//		}
 	}
 
 	private void checkCollision() {
