@@ -14,7 +14,7 @@ public class Ball extends GraphicObject {
 	public Ball() {
 		xpos = ClientWindow.WINDOW_WIDTH/2;
 		ypos = ClientWindow.WINDOW_HEIGHT/2;
-		setSpeed(5*(float)Math.random() + 5, 360*(float)Math.random());
+		setSpeed(10*(float)Math.random() + 10, 360*(float)Math.random());
 	}
 	
 	void setSpeed(float newspeed, float newdir) {
@@ -78,7 +78,7 @@ public class Ball extends GraphicObject {
 	public void checkCollision(GraphicObject other) {
 		
 		if(other.getClass().equals(Racket.class)) {
-			if(Geometry.distance(this, other) < DIAMETER/2) {
+			if(Geometry.distance(this, other) < DIAMETER) {
 				System.out.println("racket collision");
 				setSpeed(speed, Geometry.getDir(this, other));
 			}

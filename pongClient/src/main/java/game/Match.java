@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -45,8 +46,13 @@ public class Match extends GraphicObject {
 
 	@Override
 	public void draw(Graphics g) {
-		g.drawRect(1, 1, Contents.WIDTH, Contents.HEIGHT);
-		
+		Color color = g.getColor();
+		g.setColor(Color.DARK_GRAY);
+		g.drawRect(0, 0, XSIZE -1, YSIZE -1);
+		g.drawOval(-YSIZE/2, 0, YSIZE, YSIZE);
+		g.drawOval(XSIZE - YSIZE/2, 0, YSIZE, YSIZE);
+		g.drawLine(XSIZE/2, 0, XSIZE/2, YSIZE);
+		g.setColor(color);
 	}
 
 	@Override

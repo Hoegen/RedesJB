@@ -96,7 +96,13 @@ public class Racket extends GraphicObject {
 
 	@Override
 	public void checkCollision(GraphicObject other) {
-		// TODO Auto-generated method stub
+		if(other.getClass().equals(Match.class)) {
+			if(ypos < 0 ) {
+				ypos = 0;
+			}else if (ypos > Match.YSIZE){
+				ypos = Match.YSIZE;
+			}
+		}
 		
 	}
 }

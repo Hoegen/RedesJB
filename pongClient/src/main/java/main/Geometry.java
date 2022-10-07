@@ -12,7 +12,7 @@ public class Geometry {
 	
 	public static float distance(GraphicObject go1, GraphicObject go2) {
 		
-		//trata a distância entre 
+		//trata a distância entre bola e raquete
 		if(go1.getClass().equals(Ball.class) && go2.getClass().equals(Racket.class)) {
 			
 			float x2 = go2.getXpos();
