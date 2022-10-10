@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import game.Ball;
 import game.GraphicObject;
 import game.Match;
+import game.Player;
 
 public class Contents extends JPanel {
 	/**
@@ -30,8 +30,8 @@ public class Contents extends JPanel {
 		drawlist.add(match);
 		drawlist.add(match.getBall());
 		
-		for(int i = 0; i < match.getPlayerlist().size(); i++) {
-			drawlist.add(match.getPlayerlist().get(i).getRacket());
+		for(Player player : match.getPlayerlist().values()) {
+			drawlist.add(player.getRacket());
 		}
 		
 		new Thread(()-> run()).start();

@@ -1,10 +1,8 @@
 package game;
 
-import main.ClientWindow;
-
 public class Player {
 	
-	private int score;
+	int score = 0;
 	
 	private int id;
 	
@@ -13,22 +11,24 @@ public class Player {
 	private Racket racket;
 	
 	public Player(String name, int id) {
-		score = 0;
+		final int LEFT = 1;
+		final int RIGHT = 2;
+		
 		this.id = id;
 		this.name = name;
 		racket = new Racket(this);
 		
 		switch(id) {
-			case (0):
+			case (LEFT):
 				//JOGADOR DO LADO ESQUERDO
 				racket.xpos = racket.getWidth()/2 + Match.MARGIN;
-				racket.ypos = ClientWindow.WINDOW_HEIGHT/2;
+				racket.ypos = Match.YSIZE/2;
 				break;
 				
-			case (1):
+			case (RIGHT):
 				//JOGADOR DO LADO DIREITO
-				racket.xpos = ClientWindow.WINDOW_WIDTH - (racket.getWidth()/2 + Match.MARGIN);
-				racket.ypos = ClientWindow.WINDOW_HEIGHT/2;
+				racket.xpos = Match.XSIZE - (racket.getWidth()/2 + Match.MARGIN);
+				racket.ypos = Match.YSIZE/2;
 				break;
 		}
 		

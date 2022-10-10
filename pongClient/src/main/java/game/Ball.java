@@ -1,7 +1,7 @@
 package game;
 
 import java.awt.Graphics;
-import main.ClientWindow;
+
 import main.Geometry;
 
 public class Ball extends GraphicObject {
@@ -10,13 +10,15 @@ public class Ball extends GraphicObject {
 	float speed;
 	float xSpeed;
 	float ySpeed;
+	Match match;
 	
-	public Ball() {
-		xpos = ClientWindow.WINDOW_WIDTH/2;
-		ypos = ClientWindow.WINDOW_HEIGHT/2;
-		setSpeed(10*(float)Math.random() + 10, 360*(float)Math.random());
+	public Ball(Match match) {
+		this.match = match;
+		xpos = Match.XSIZE/2;
+		ypos = Match.YSIZE/2;
+		setSpeed();
 	}
-	
+
 	void setSpeed(float newspeed, float newdir) {
 		
 		//corrige ângulos negativos
@@ -36,27 +38,38 @@ public class Ball extends GraphicObject {
 		boolean xbug = false;
 		boolean ybug = false;
 		
-		xbug |= xpos + xSpeed < 0 + DIAMETER/2 && xSpeed < 0;
-		if(!xbug) xbug |= xpos + xSpeed > Match.XSIZE - DIAMETER/2 && xSpeed > 0;
-		
-		ybug |= ypos - ySpeed < 0 + DIAMETER/2 && ySpeed > 0;
-		if(!ybug) ybug |= ypos - ySpeed > Match.YSIZE - DIAMETER/2 && ySpeed < 0;
-		
-		
-		if(xbug) {
-			System.out.println("bugo");
-			dir = Geometry.getDir(-xSpeed, ySpeed, 0, 0);
-			xSpeed = -xSpeed;
-		}
+		ybug = ypos - ySpeed < 0 + DIAMETER/2 && ySpeed > 0;
+		if(!ybug) ybug = ypos - ySpeed > Match.YSIZE - DIAMETER/2 && ySpeed < 0;
+
 		if(ybug) {
-			System.out.println("bugo");
 			dir = Geometry.getDir(xSpeed, ySpeed, 0, 0);
 			ySpeed = -ySpeed;
+		}
+		
+		
+		if(xpos + xSpeed < 0 + DIAMETER/2 && xSpeed < 0) {
+			xbug = true;
+			match.playerlist.get(2).score++;
+		}
+			
+		if(xpos + xSpeed > Match.XSIZE - DIAMETER/2 && xSpeed > 0) {
+			xbug = true;
+			match.playerlist.get(1).score++;
+		}
+		
+		if(xbug) {
+			dir = Geometry.getDir(-xSpeed, ySpeed, 0, 0);
+			xSpeed = -xSpeed;
+			match.point();
 		}
 	}
 	
 	public void setSpeed(float newspeed) {
 		setSpeed(newspeed, dir);
+	}
+	
+	private void setSpeed() {
+		setSpeed(10*(float)Math.random() + 10, 360*(float)Math.random());
 	}
 	
 	public float getSpeed() {
@@ -70,6 +83,10 @@ public class Ball extends GraphicObject {
 
 	@Override
 	public void move() {
+		if(match.paused) {
+			return;
+		}
+			
 		xpos += xSpeed;
 		ypos -= ySpeed;
 	}
@@ -79,29 +96,62 @@ public class Ball extends GraphicObject {
 		
 		if(other.getClass().equals(Racket.class)) {
 			if(Geometry.distance(this, other) < DIAMETER) {
-				System.out.println("racket collision");
 				setSpeed(speed, Geometry.getDir(this, other));
 			}
 			
 			
 		}else if(other.getClass().equals(Match.class)) {
-			//espelha a componente horizontal ou vertical da velocidade
-			if(xpos < 0 + DIAMETER/2 || xpos > Match.XSIZE - DIAMETER/2) {
-				
-				if(xpos < 0) xpos = 0 + DIAMETER/2;
-				else if(xpos > Match.XSIZE) xpos = Match.XSIZE - DIAMETER/2;
-				
-				System.out.println("xcollision: xpos = "  + xpos + ", ypos = " + ypos + ", DIAMETER = " + DIAMETER);
-				setSpeed(speed, Geometry.getDir(-xSpeed, -ySpeed, 0, 0));
+			wallCollision();
+		}
+	}
+	
+	void reposition() {
+		match.paused = true;
+		xpos = Match.XSIZE/2;
+		ypos = Match.YSIZE/2;
+		setSpeed();
+	}
+	
+	private void wallCollision() {
+		boolean xcollision = false;
+		
+		//colisão vertical	
+		if(ypos < 0 + DIAMETER/2 || ypos > Match.YSIZE - DIAMETER/2) {
+			
+			if(ypos < 0) ypos = 0 + DIAMETER/2;
+			else if(ypos > Match.YSIZE) ypos = Match.YSIZE - DIAMETER/2;
+			
+			//espelha a velocidade verticalmente
+			setSpeed(speed, Geometry.getDir(xSpeed, ySpeed, 0, 0));
+			return;
+		} 
+		
+			
+		//lado esquerdo
+		else if(xpos < 0 + DIAMETER/2) {
+			xcollision = true;
+			match.playerlist.get(2).score++;
+			System.out.println("Pontuação jogador 2: " + match.playerlist.get(2).score);
+			
+			if(xpos < 0) {
+				xpos = 0 + DIAMETER/2;
 			}
-			if(ypos < 0 + DIAMETER/2 || ypos > Match.YSIZE - DIAMETER/2) {
-				
-				if(ypos < 0) ypos = 0 + DIAMETER/2;
-				else if(ypos > Match.YSIZE) ypos = Match.YSIZE - DIAMETER/2;
-				
-				System.out.println("Ycollision: xpos = "  + xpos + ", ypos = " + ypos + ", DIAMETER = " + DIAMETER);
-				setSpeed(speed, Geometry.getDir(xSpeed, ySpeed, 0, 0));
+		}
+		
+		//lado direito
+		else if(xpos > Match.XSIZE - DIAMETER/2) {
+			xcollision = true;
+			match.playerlist.get(1).score++;
+			System.out.println("Pontuação jogador 1: " + match.playerlist.get(1).score);
+			
+			if(xpos > Match.XSIZE) {
+				xpos = Match.XSIZE - DIAMETER/2;
 			}
+		}
+		
+		if(xcollision) {
+			//espelha a velocidade horizontalmente
+			match.point();
 		}
 	}
 

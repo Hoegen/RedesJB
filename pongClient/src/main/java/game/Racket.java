@@ -74,7 +74,7 @@ public class Racket extends GraphicObject {
 	public void move() {
 		
 		switch (player.getId()) {
-			case 0:
+			case 1:
 				if(ClientWindow.KeysPressed.A) {
 					ypos -= speed;
 				}
@@ -83,7 +83,7 @@ public class Racket extends GraphicObject {
 				}
 				break;
 
-			case 1:
+			case 2:
 				if(ClientWindow.KeysPressed.L) {
 					ypos -= speed;
 				}

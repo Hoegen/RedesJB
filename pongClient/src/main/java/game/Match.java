@@ -2,34 +2,32 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import main.ClientWindow;
-import main.Contents;
 
 public class Match extends GraphicObject {
 	public final static int MARGIN = 20;
-	public static int XSIZE;
-	public static int YSIZE;
+	public static int XSIZE = ClientWindow.WINDOW_WIDTH;
+	public static int YSIZE = ClientWindow.WINDOW_HEIGHT;
 	
+	public boolean paused = true; 
 	
-	private ArrayList<Player> playerlist = new ArrayList<Player>();
+	HashMap<Integer, Player> playerlist = new HashMap<Integer, Player>();
 	
-	private Ball ball = new Ball();
+	private Ball ball;
 	
 	public Match() {
-		playerlist.add(new Player("Jogador 1", 0));
-		playerlist.add(new Player("Jogador 2", 1));
-		YSIZE = ClientWindow.WINDOW_HEIGHT;
-		XSIZE = ClientWindow.WINDOW_WIDTH;
-		
+		playerlist.put(1, new Player("Jogador 1", 1));
+		playerlist.put(2, new Player("Jogador 2", 2));
+		ball = new Ball(this);
 	}
 	
-	public ArrayList<Player> getPlayerlist() {
+	public HashMap<Integer, Player> getPlayerlist() {
 		return playerlist;
 	}
 
-	public void setPlayerlist(ArrayList<Player> playerlist) {
+	public void setPlayerList(HashMap<Integer, Player> playerlist) {
 		this.playerlist = playerlist;
 	}
 
@@ -42,7 +40,11 @@ public class Match extends GraphicObject {
 	}
 
 	@Override
-	public void move() {}
+	public void move() {
+		if(ClientWindow.KeysPressed.SPACE) {
+			paused = false;
+		}
+	}
 
 	@Override
 	public void draw(Graphics g) {
@@ -57,6 +59,10 @@ public class Match extends GraphicObject {
 
 	@Override
 	public void checkCollision(GraphicObject other) {}
+
+	public void point() {
+		ball.reposition();
+	}
 	
 	 
 }

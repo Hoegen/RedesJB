@@ -38,6 +38,7 @@ public class ClientWindow extends JFrame {
 	
 	
 	public static class KeysPressed{
+		public static boolean SPACE = false;
 		public static boolean A = false;
 		public static boolean Z = false;
 		public static boolean L = false;
@@ -66,6 +67,9 @@ public class ClientWindow extends JFrame {
 				case KeyEvent.VK_COMMA:
 					KeysPressed.comma = true;
 					break;
+				case KeyEvent.VK_SPACE:
+					KeysPressed.SPACE = true;
+					break;
 			}
 		}
 
@@ -83,6 +87,9 @@ public class ClientWindow extends JFrame {
 					break;
 				case KeyEvent.VK_COMMA:
 					KeysPressed.comma =false;
+					break;
+				case KeyEvent.VK_SPACE:
+					KeysPressed.SPACE = false;
 					break;
 			}
 		}
