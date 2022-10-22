@@ -1,13 +1,13 @@
-package main;
+package client;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		//new ClientWindow();
+		new ClientWindow();
 		
 		//new ServidorFake();
-		server.ServidorFake.main();
+		//ServidorFake.main();
 	}
 
 }

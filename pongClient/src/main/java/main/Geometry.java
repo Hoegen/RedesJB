@@ -1,9 +1,5 @@
 package main;
 
-import game.Ball;
-import game.GraphicObject;
-import game.Racket;
-
 public class Geometry {
 	
 	public static float distance(float x1, float y1, float x2, float y2) {
@@ -13,26 +9,26 @@ public class Geometry {
 	public static float distance(GraphicObject go1, GraphicObject go2) {
 		
 		//trata a distância entre bola e raquete
-		if(go1.getClass().equals(Ball.class) && go2.getClass().equals(Racket.class)) {
+		if(go1.getClass().equals(Ball.class) && go2.getClass().equals(Player.class)) {
 			
 			float x2 = go2.getXpos();
 			float y2 = go2.getYpos();
 			
-			if(go1.getXpos() > x2 + ((Racket)go2).getWidth()/2) {
-				x2 += ((Racket)go2).getWidth()/2;
-			} else if(go1.getXpos() < x2 - ((Racket)go2).getWidth()/2) {
-				x2 -= ((Racket)go2).getWidth()/2;
+			if(go1.getXpos() > x2 + ((Player)go2).getWidth()/2) {
+				x2 += ((Player)go2).getWidth()/2;
+			} else if(go1.getXpos() < x2 - ((Player)go2).getWidth()/2) {
+				x2 -= ((Player)go2).getWidth()/2;
 			}
 			
-			if(go1.getYpos() > y2 + ((Racket)go2).getHeight()/2) {
-				y2 += ((Racket)go2).getHeight()/2;
-			} else if(go1.getYpos() < y2 - ((Racket)go2).getHeight()/2) {
-				y2 -= ((Racket)go2).getHeight()/2;
+			if(go1.getYpos() > y2 + ((Player)go2).getHeight()/2) {
+				y2 += ((Player)go2).getHeight()/2;
+			} else if(go1.getYpos() < y2 - ((Player)go2).getHeight()/2) {
+				y2 -= ((Player)go2).getHeight()/2;
 			}
 			
 			return distance(go1.getXpos(), go1.getYpos(), x2, y2);
 		
-		}else if(go2.getClass().equals(Ball.class) && go1.getClass().equals(Racket.class)) {
+		}else if(go2.getClass().equals(Ball.class) && go1.getClass().equals(Player.class)) {
 			return distance(go2, go1);
 		}
 		
@@ -62,8 +58,8 @@ public class Geometry {
 		//tratando caso os objetos estejam perfeitamente sobrepostos
 		if(distance == 0) {
 			//se possível, direciona para o centro da tela
-			if(distance(x1, x2, Contents.WIDTH, Contents.HEIGHT) > 0)
-				return getDir(x1, x2, Contents.WIDTH/2, Contents.HEIGHT/2);
+			if(distance(x1, x2, Match.WIDTH, Match.HEIGHT) > 0)
+				return getDir(x1, x2, Match.WIDTH/2, Match.HEIGHT/2);
 			
 			//caso contrário, manda para a direita
 			else

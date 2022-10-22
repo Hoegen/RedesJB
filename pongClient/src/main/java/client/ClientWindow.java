@@ -1,4 +1,4 @@
-package main;
+package client;
 
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -24,7 +24,7 @@ public class ClientWindow extends JFrame {
 		super.setTitle("PONGIO");
 		contents.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
-		super.setLocation(UserProperties.getScrWid()/2 - WINDOW_WIDTH/2, UserProperties.getScrHei()/2 - WINDOW_HEIGHT/2);
+		super.setLocation(Util.UserProperties.getScrWid()/2 - WINDOW_WIDTH/2, Util.UserProperties.getScrHei()/2 - WINDOW_HEIGHT/2);
 		super.setResizable(false);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		super.addKeyListener(new ActionListener());

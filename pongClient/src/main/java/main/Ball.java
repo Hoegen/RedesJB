@@ -1,12 +1,18 @@
-package game;
+package main;
 
 import java.awt.Graphics;
-
-import main.Geometry;
 
 public class Ball extends GraphicObject {
 	final int DIAMETER = 30;
 	float dir;
+	public float getDir() {
+		return dir;
+	}
+
+	public void setDir(float dir) {
+		this.dir = dir;
+	}
+
 	float speed;
 	float xSpeed;
 	float ySpeed;
@@ -94,14 +100,14 @@ public class Ball extends GraphicObject {
 	@Override
 	public void checkCollision(GraphicObject other) {
 		
-		if(other.getClass().equals(Racket.class)) {
+		if(other == null) {
+			wallCollision();
+		}else 
+			
+		if(other.getClass().equals(Player.class)) {
 			if(Geometry.distance(this, other) < DIAMETER) {
 				setSpeed(speed, Geometry.getDir(this, other));
-			}
-			
-			
-		}else if(other.getClass().equals(Match.class)) {
-			wallCollision();
+			}	
 		}
 	}
 	
