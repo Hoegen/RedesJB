@@ -16,8 +16,11 @@ public class ClientWindow extends JFrame {
 	**/
 	public final static int WINDOW_WIDTH  = 1000;
 	public final static int WINDOW_HEIGHT = 500;
+
+	public static boolean lastframespacekeydown = false;
 	
 	public ClientWindow() {
+		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
 		Match contents = new Match();
 		super.add(contents);
 		//super.add(new Panel(contents));
@@ -43,6 +46,10 @@ public class ClientWindow extends JFrame {
 		public static boolean L = false;
 		public static boolean comma = false;
 		
+	}
+	
+	public static class KeyPressed{
+		public static boolean SPACE = false;
 	}
 	
 	public class ActionListener implements KeyListener {

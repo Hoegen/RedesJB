@@ -65,7 +65,7 @@ public class Player extends GraphicObject {
 	}
 
 	@Override
-	public void move() {
+	public void move(double delta) {
 		setSpeed(0);
 		
 		switch (id) {
@@ -87,7 +87,7 @@ public class Player extends GraphicObject {
 				}
 				break;
 		}
-		ypos += getSpeed();
+		ypos += getSpeed()*delta;
 	}
 
 	@Override

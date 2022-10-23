@@ -63,31 +63,30 @@ public class Match extends JPanel {
 	public void run() {
 		//game loop
 		long lastTime = System.nanoTime();
-		double amountOfTicks = 60.0;
-		double ns = 1000000000 / amountOfTicks;
-		double tickdelta = 0;
+		double framespersecond = 60.0;
+		double delta = 0;
+		double ticks = 0;
 		long now = System.nanoTime();
 		while(true) {
-			now = System.nanoTime();
-			tickdelta += (now -lastTime)/ns;
-			lastTime = now;
-			if(tickdelta > 1) {
+				now = System.nanoTime();
+				delta = now - lastTime;
+				ticks = (delta*framespersecond) / 1000000000.0;
 				checkCollision();
-				move();
+				move(ticks);
 				repaint();
-				tickdelta--;
-			}
+				lastTime = now;
 		}
 	}
 
-	private void move() {
+
+	private void move(double ticks) {
 		if(KeyDown.SPACE && !lastframespacekeydown) {
 			paused = !paused;
 		}
 		lastframespacekeydown = KeyDown.SPACE;
 		
 		for(GraphicObject go : drawlist) {
-			go.move();
+			go.move(ticks);
 		}
 	}
 	

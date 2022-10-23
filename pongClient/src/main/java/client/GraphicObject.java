@@ -9,7 +9,7 @@ public abstract class GraphicObject {
 	protected float tilt;
 	protected float speed;
 	
-	public abstract void move();
+	public abstract void move(double delta);
 	
 	public abstract void draw(Graphics g);
 	

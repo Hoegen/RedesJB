@@ -62,7 +62,7 @@ public class Player extends GraphicObject {
 	}
 
 	@Override
-	public void move() {
+	public void move(double ticks) {
 		speed = 0;
 		
 		switch (id) {
@@ -84,7 +84,7 @@ public class Player extends GraphicObject {
 				}
 				break;
 		}
-		ypos += speed;
+		ypos += speed * ticks;
 	}
 
 	@Override

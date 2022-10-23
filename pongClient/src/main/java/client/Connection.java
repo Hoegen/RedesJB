@@ -48,7 +48,8 @@ public class Connection {
 			
 			Element pausecommand = message.createElement("pausecommand");
 			packet.appendChild(pausecommand);
-			pausecommand.appendText(Boolean.toString(ClientWindow.KeyDown.SPACE && !Match.lastframespacekeydown));
+			pausecommand.appendText(Boolean.toString(ClientWindow.KeyPressed.SPACE));
+			if(ClientWindow.KeyPressed.SPACE) ClientWindow.KeyPressed.SPACE = false;
 			
 			return message.toString();
 		}

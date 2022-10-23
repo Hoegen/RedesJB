@@ -80,13 +80,13 @@ public class Ball extends GraphicObject {
 	}
 
 	@Override
-	public void move() {
+	public void move(double delta) {
 		if(match.paused) {
 			return;
 		}
-			
-		xpos += xSpeed;
-		ypos -= ySpeed;
+		
+		xpos += xSpeed * delta;
+		ypos -= ySpeed * delta;
 	}
 
 	@Override

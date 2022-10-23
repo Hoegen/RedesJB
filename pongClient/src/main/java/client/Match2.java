@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import server.ServidorFake;
 
-public class Match extends JPanel {
+public class Match2 extends JPanel {
 	/**
 	 * 
 	 */
@@ -20,6 +20,7 @@ public class Match extends JPanel {
 	 * 
 	 */
 	public boolean paused = true;
+	public static boolean lastframespacekeydown = false;
 	
 	public final static int MARGIN = 20;
 	public static int XSIZE = ClientWindow.WINDOW_WIDTH;
@@ -31,8 +32,8 @@ public class Match extends JPanel {
 	
 	private ArrayList<GraphicObject> drawlist = new ArrayList<GraphicObject>();
 	
-	public Match() {
-		
+	public Match2() {
+		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
 		playerlist.put(1, new Player("Jogador 1", 1));
 		playerlist.put(2, new Player("Jogador 2", 2));
 		ball = new Ball(this);
@@ -66,19 +67,23 @@ public class Match extends JPanel {
 	public void run() {
 		//game loop
 		long lastTime = System.nanoTime();
-		double framespersecond = 60.0;
-		double delta = 0;
-		double ticks = 0;
+		double amountOfTicks = 60.0;
+		double ns = 1000000000 / amountOfTicks;
+		double tickdelta = 0;
 		long now = System.nanoTime();
 		while(true) {
-				now = System.nanoTime();
-				delta = now - lastTime;
-				ticks = (delta*framespersecond) / 1000000000.0;
+			now = System.nanoTime();
+			tickdelta += (now -lastTime)/ns;
+			lastTime = now;
+			if(tickdelta > 1) {
+				tickdelta--;
+				System.out.println("servidor: x = " + server.ServidorFake.match.ball.getXpos() + ", y = " + server.ServidorFake.match.ball.getYpos());
+				System.out.println(" cliente: x = " + ball.getXpos() + ", y = " + ball.getYpos() + "\n\n\n");
 				serverUpdate();
 				connection.sender.send();
-				move(ticks);
+				move();
 				repaint();
-				lastTime = now;
+			}
 		}
 	}
 
@@ -95,16 +100,15 @@ public class Match extends JPanel {
 		ball.serverUpdate();
 	}
 
-	private void move(double delta) {
+	private void move() {
 		
-		if(ClientWindow.KeyDown.SPACE && !ClientWindow.lastframespacekeydown) {
+		if(ClientWindow.KeyDown.SPACE && !lastframespacekeydown) {
 			paused = !paused;
-			ClientWindow.KeyPressed.SPACE = true;
 		}
-		ClientWindow.lastframespacekeydown = ClientWindow.KeyDown.SPACE;
+		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
 		
 		for(GraphicObject go : drawlist) {
-			go.move(delta);
+			go.move();
 		}
 	}
 	
@@ -114,10 +118,10 @@ public class Match extends JPanel {
 
 	void drawField(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
-		g.drawRect(0, 0, Match.XSIZE -1, Match.YSIZE -1);
-		g.drawOval(-Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
-		g.drawOval(Match.XSIZE - Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
-		g.drawLine(Match.XSIZE/2, 0, Match.XSIZE/2, Match.YSIZE);
+		g.drawRect(0, 0, Match2.XSIZE -1, Match2.YSIZE -1);
+		g.drawOval(-Match2.YSIZE/2, 0, Match2.YSIZE, Match2.YSIZE);
+		g.drawOval(Match2.XSIZE - Match2.YSIZE/2, 0, Match2.YSIZE, Match2.YSIZE);
+		g.drawLine(Match2.XSIZE/2, 0, Match2.XSIZE/2, Match2.YSIZE);
 	}
 	
 }
