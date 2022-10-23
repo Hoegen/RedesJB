@@ -1,18 +1,19 @@
 package server;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import client.Connection;
-import main.Player;
 
 public class ServidorFake {
-	public static main.Match match;
+	public static Match match;
 	private DocBuilder docbuilder;
 	
 	
 	public ServidorFake() {
-		match = new main.Match();
+		match = new Match();
 		docbuilder = new DocBuilder();
 	};
 	
@@ -27,11 +28,27 @@ public class ServidorFake {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			server.newMessage();
+			server.sendMessage(server.newMessage());
 		}
 	}
 	
-	public Document newMessage() {
+	public String receiveMessage(String message) {
+		Elements packet = Jsoup.parse(message).getElementsByTag("packet");
+		String keys = packet.select("keysdown").text();
+		
+		Match.KeyDown.A = keys.contains("A");
+		Match.KeyDown.Z = keys.contains("Z");
+		Match.KeyDown.L = keys.contains("L");
+		Match.KeyDown.comma = keys.contains(",");
+		Match.KeyDown.SPACE = keys.contains(" ");
+		
+			
+		match.paused = match.paused ^ Boolean.valueOf(packet.select("pausecommand").text());
+		
+		return "placeholder para uma resposta do sistema";
+	}
+	
+	public String newMessage() {
 		Document message = Document.createShell("");
 		
 		Element packet = message.createElement("packet");
@@ -55,7 +72,7 @@ public class ServidorFake {
 		
 		
 		//adiciona a bola na mensagem
-		Element ball = message.createElement("Ball");
+		Element ball = message.createElement("ball");
 		packet.appendChild(ball);
 		
 		docbuilder.addElement(message, ball, "speed", Float.toString(match.ball.getSpeed()));
@@ -63,13 +80,19 @@ public class ServidorFake {
 		docbuilder.addElement(message, ball, "ypos", Float.toString(match.ball.getYpos()));
 		docbuilder.addElement(message, ball, "dir", Float.toString(match.ball.getDir()));
 		
-		System.out.println("______________________________________________\n"
-						+ "               Mensagem enviada pelo servidor:");
-		System.out.println(packet.toString());
 		
-		Connection.Receiver.receive(packet.toString());
 		
-		return message;
+		//adiciona a partida na mensagem
+		Element match = message.createElement("match");
+		packet.appendChild(match);
+		
+		docbuilder.addElement(message, match, "paused", String.valueOf(ServidorFake.match.paused));
+		
+		return packet.toString();
+	}
+	
+	public String sendMessage(String msg) {
+		return Connection.Receiver.receive(msg);
 	}
 	
 	private class DocBuilder{

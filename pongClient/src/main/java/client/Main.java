@@ -4,7 +4,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		new ClientWindow();
+		
+		new Thread(()->new ClientWindow()).start();
+		
 		
 		//new ServidorFake();
 		//ServidorFake.main();

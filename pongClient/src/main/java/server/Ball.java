@@ -1,10 +1,18 @@
-package client;
+package server;
 
 import java.awt.Graphics;
 
 public class Ball extends GraphicObject {
 	final int DIAMETER = 30;
 	float dir;
+	public float getDir() {
+		return dir;
+	}
+
+	public void setDir(float dir) {
+		this.dir = dir;
+	}
+
 	float speed;
 	float xSpeed;
 	float ySpeed;
@@ -28,8 +36,8 @@ public class Ball extends GraphicObject {
 		
 		speed = newspeed;
 		dir = newdir;
-		xSpeed = Util.Geometry.xSpeed(newdir, newspeed);
-		ySpeed = Util.Geometry.ySpeed(newdir, newspeed);
+		xSpeed = Geometry.xSpeed(newdir, newspeed);
+		ySpeed = Geometry.ySpeed(newdir, newspeed);
 		
 		
 		//corrige mudanças de direção que joguem a bolinha para BUGS
@@ -40,7 +48,7 @@ public class Ball extends GraphicObject {
 		if(!ybug) ybug = ypos - ySpeed > Match.YSIZE - DIAMETER/2 && ySpeed < 0;
 
 		if(ybug) {
-			dir = Util.Geometry.getDir(xSpeed, ySpeed, 0, 0);
+			dir = Geometry.getDir(xSpeed, ySpeed, 0, 0);
 			ySpeed = -ySpeed;
 		}
 		
@@ -56,7 +64,7 @@ public class Ball extends GraphicObject {
 		}
 		
 		if(xbug) {
-			dir = Util.Geometry.getDir(-xSpeed, ySpeed, 0, 0);
+			dir = Geometry.getDir(-xSpeed, ySpeed, 0, 0);
 			xSpeed = -xSpeed;
 			match.point();
 		}
@@ -97,8 +105,8 @@ public class Ball extends GraphicObject {
 		}else 
 			
 		if(other.getClass().equals(Player.class)) {
-			if(Util.Geometry.distance(this, other) < DIAMETER) {
-				setSpeed(speed, Util.Geometry.getDir(this, other));
+			if(Geometry.distance(this, other) < DIAMETER) {
+				setSpeed(speed, Geometry.getDir(this, other));
 			}	
 		}
 	}
@@ -108,15 +116,6 @@ public class Ball extends GraphicObject {
 		xpos = Match.XSIZE/2;
 		ypos = Match.YSIZE/2;
 		setSpeed();
-	}
-	
-	void serverUpdate() {
-		
-		dir = Connection.Receiver.balldata.dir;
-		ypos = Connection.Receiver.balldata.ypos;
-		xpos = Connection.Receiver.balldata.xpos;
-		speed = Connection.Receiver.balldata.speed;
-		setSpeed(speed, dir);
 	}
 	
 	private void wallCollision() {
@@ -129,7 +128,7 @@ public class Ball extends GraphicObject {
 			else if(ypos > Match.YSIZE) ypos = Match.YSIZE - DIAMETER/2;
 			
 			//espelha a velocidade verticalmente
-			setSpeed(speed, Util.Geometry.getDir(xSpeed, ySpeed, 0, 0));
+			setSpeed(speed, Geometry.getDir(xSpeed, ySpeed, 0, 0));
 			return;
 		} 
 		

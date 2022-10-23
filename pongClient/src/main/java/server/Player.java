@@ -1,4 +1,4 @@
-package client;
+package server;
 
 import java.awt.Graphics;
 
@@ -9,6 +9,13 @@ public class Player extends GraphicObject {
 	private char upkey = 'a';
 	private char downkey = 'z';
 	private float speed = 0;
+	public float getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(float speed) {
+		this.speed = speed;
+	}
 	private String shape = "RECT";
 	int score = 0;
 	
@@ -53,41 +60,31 @@ public class Player extends GraphicObject {
 		}
 		
 	}
-	
-	void serverUpdate() {
-		for(int i = 0; i < Connection.Receiver.players.size(); i++) {
-			if(id == Connection.Receiver.players.get(i).id) {
-				setSpeed(Connection.Receiver.players.get(i).speed);
-				ypos = Connection.Receiver.players.get(i).ypos;
-				score = Connection.Receiver.players.get(i).score;
-			}
-		}
-	}
 
 	@Override
 	public void move() {
-		setSpeed(0);
+		speed = 0;
 		
 		switch (id) {
 			case 1:
-				if(ClientWindow.KeyDown.A) {
-					setSpeed(getSpeed() - 10);
+				if(Match.KeyDown.A) {
+					speed -= 10;
 				}
-				if(ClientWindow.KeyDown.Z) {
-					setSpeed(getSpeed() + 10);
+				if(Match.KeyDown.Z) {
+					speed += 10;
 				}
 				break;
 
 			case 2:
-				if(ClientWindow.KeyDown.L) {
-					setSpeed(getSpeed() - 10);
+				if(Match.KeyDown.L) {
+					speed -= 10;
 				}
-				if(ClientWindow.KeyDown.comma) {
-					setSpeed(getSpeed() + 10);
+				if(Match.KeyDown.comma) {
+					speed += 10;
 				}
 				break;
 		}
-		ypos += getSpeed();
+		ypos += speed;
 	}
 
 	@Override
@@ -160,13 +157,5 @@ public class Player extends GraphicObject {
 	}
 	public void setHeight(int height) {
 		this.height = height;
-	}
-
-	public float getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(float speed) {
-		this.speed = speed;
 	}
 }

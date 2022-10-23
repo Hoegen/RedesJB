@@ -1,4 +1,4 @@
-package client;
+package server;
 
 
 import java.awt.Color;
@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import server.ServidorFake;
-
 public class Match extends JPanel {
 	/**
 	 * 
@@ -20,27 +18,25 @@ public class Match extends JPanel {
 	 * 
 	 */
 	public boolean paused = true;
-	public static boolean lastframespacekeydown = false;
+	private boolean lastframespacekeydown = false;
 	
 	public final static int MARGIN = 20;
-	public static int XSIZE = ClientWindow.WINDOW_WIDTH;
-	public static int YSIZE = ClientWindow.WINDOW_HEIGHT;
-	public Connection connection = new Connection(new server.ServidorFake());
+	public static int XSIZE = 1000;
+	public static int YSIZE = 500;
 	
-	HashMap<Integer, Player> playerlist = new HashMap<Integer, Player>();
-	private Ball ball;
+	public HashMap<Integer, Player> playerlist = new HashMap<Integer, Player>();
+	public Ball ball;
 	
 	private ArrayList<GraphicObject> drawlist = new ArrayList<GraphicObject>();
 	
 	public Match() {
-		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
+		lastframespacekeydown = KeyDown.SPACE;
 		playerlist.put(1, new Player("Jogador 1", 1));
 		playerlist.put(2, new Player("Jogador 2", 2));
 		ball = new Ball(this);
 		
 		this.setBackground(Color.BLACK);
 		
-		new Thread(()-> ServidorFake.main()).start();
 		
 		drawlist.add(ball);
 		for(Player player : playerlist.values()) {
@@ -76,34 +72,19 @@ public class Match extends JPanel {
 			tickdelta += (now -lastTime)/ns;
 			lastTime = now;
 			if(tickdelta > 1) {
-				serverUpdate();
+				checkCollision();
+				move();
 				repaint();
 				tickdelta--;
-				connection.sender.send();
-				move();
 			}
 		}
 	}
 
-	private void serverUpdate() {
-		if(Connection.Receiver.unchanged) return;
-		
-		Connection.Receiver.unchanged = true;
-		
-		paused = Connection.Receiver.paused;
-		for(Player localplayer : playerlist.values()) {
-			localplayer.serverUpdate();
-		}
-		
-		ball.serverUpdate();
-	}
-
 	private void move() {
-		
-		if(ClientWindow.KeyDown.SPACE && !lastframespacekeydown) {
+		if(KeyDown.SPACE && !lastframespacekeydown) {
 			paused = !paused;
 		}
-		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
+		lastframespacekeydown = KeyDown.SPACE;
 		
 		for(GraphicObject go : drawlist) {
 			go.move();
@@ -114,12 +95,31 @@ public class Match extends JPanel {
 		ball.reposition();
 	}
 
+	private void checkCollision() {
+		for(int i = 0; i < drawlist.size(); i++) {
+			drawlist.get(i).checkCollision(null);
+			for(int j = i + 1; j < drawlist.size(); j++) {
+				drawlist.get(i).checkCollision(drawlist.get(j));
+				drawlist.get(j).checkCollision(drawlist.get(i));
+			}
+		}
+	}
+
 	void drawField(Graphics g) {
 		g.setColor(Color.DARK_GRAY);
 		g.drawRect(0, 0, Match.XSIZE -1, Match.YSIZE -1);
 		g.drawOval(-Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
 		g.drawOval(Match.XSIZE - Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
 		g.drawLine(Match.XSIZE/2, 0, Match.XSIZE/2, Match.YSIZE);
+	}
+	
+	public static class KeyDown{
+		public static boolean SPACE = false;
+		public static boolean A = false;
+		public static boolean Z = false;
+		public static boolean L = false;
+		public static boolean comma = false;
+		
 	}
 	
 }
