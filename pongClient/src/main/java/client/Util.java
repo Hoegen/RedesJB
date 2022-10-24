@@ -9,9 +9,27 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.jsoup.Jsoup;
 import org.jsoup.select.Elements;
 
+
 public class Util {
-	
+
 	public static class Geometry {
+		
+		public static boolean angleIsVertical(float angle) {
+			return (angle > 45 && angle < 135) || (angle > 225 && angle < 315);
+		}
+		
+		public static float achataAngulo(float angulo) {
+			if(angulo > 45 && angulo <= 90) {
+				angulo = 45 + (angulo-45)/2;
+			}else if(angulo > 90 && angulo <= 135) {
+				angulo = 135 - (135 - angulo)/2;
+			}else if(angulo > 225 && angulo <= 270) {
+				angulo = 225 - (angulo -225)/2;
+			}else if(angulo > 270 && angulo < 315) {
+				angulo = 360 - (360 - angulo)/2;
+			}
+			return angulo;
+		}
 		
 		public static float distance(float x1, float y1, float x2, float y2) {
 			return (float)Math.sqrt((x1-x2)*(x1-x2) + (y1 - y2)*(y1-y2));
