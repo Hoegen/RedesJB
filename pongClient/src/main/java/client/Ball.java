@@ -26,6 +26,11 @@ public class Ball extends GraphicObject {
 			newdir -= 360;
 		}
 		
+		//evita que a bolinha quique demais por ter um ângulo muito vertical
+		if(Geometry.angleIsVertical(newdir)) {
+			newdir = Geometry.achataAngulo(newdir);
+		}
+		
 		speed = newspeed;
 		dir = newdir;
 		xSpeed = Util.Geometry.xSpeed(newdir, newspeed);

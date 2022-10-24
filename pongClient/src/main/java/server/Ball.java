@@ -27,11 +27,16 @@ public class Ball extends GraphicObject {
 
 	void setSpeed(float newspeed, float newdir) {
 		
-		//corrige ângulos negativos
+		//corrige ângulos negativos ou maiores que 360
 		if(newdir < 0) {
 			newdir = 360 - newdir;
 		}else if(newdir > 360) {
 			newdir -= 360;
+		}
+		
+		//evita que a bolinha quique demais por ter um ângulo muito vertical
+		if(Geometry.angleIsVertical(newdir)) {
+			newdir = Geometry.achataAngulo(newdir);
 		}
 		
 		speed = newspeed;

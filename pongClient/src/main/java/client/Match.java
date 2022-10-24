@@ -2,7 +2,9 @@ package client;
 
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.font.FontRenderContext;
 //import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,22 +21,28 @@ public class Match extends JPanel {
 	/**
 	 * 
 	 */
-	public boolean paused = true;
+	
 	
 	public final static int MARGIN = 20;
 	public static int XSIZE = ClientWindow.WINDOW_WIDTH;
 	public static int YSIZE = ClientWindow.WINDOW_HEIGHT;
 	public Connection connection = new Connection(new server.ServidorFake());
 	
+	
+	//FUNCIONAMENTO DO JOGO____________________________
 	HashMap<Integer, Player> playerlist = new HashMap<Integer, Player>();
 	private Ball ball;
+	public boolean paused = true;
 	
+	//GRÁFICOS _________________________________
 	private ArrayList<GraphicObject> drawlist = new ArrayList<GraphicObject>();
+	GUI gui;
 	
 	public Match() {
 		
 		playerlist.put(1, new Player("Jogador 1", 1));
 		playerlist.put(2, new Player("Jogador 2", 2));
+		gui = new GUI(this);
 		ball = new Ball(this);
 		
 		this.setBackground(Color.BLACK);
@@ -61,8 +69,9 @@ public class Match extends JPanel {
 			go.draw(g);
 		}
 		
+		gui.draw(g);
 	}
-	
+
 	public void run() {
 		//game loop
 		long lastTime = System.nanoTime();
@@ -118,6 +127,54 @@ public class Match extends JPanel {
 		g.drawOval(-Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
 		g.drawOval(Match.XSIZE - Match.YSIZE/2, 0, Match.YSIZE, Match.YSIZE);
 		g.drawLine(Match.XSIZE/2, 0, Match.XSIZE/2, Match.YSIZE);
+	}
+	
+	private class GUI{
+		private final int MARGIN = 30;
+		private Graphics g;
+		private Font font = new Font("", Font.PLAIN , 30);
+		FontRenderContext frc;
+		Match m;
+		Player player1;
+		Player player2;
+		
+		GUI(Match m){
+			this.m = m;
+			player1 = m.playerlist.get(1);
+			player2 = m.playerlist.get(2);
+			if(m.getGraphics() != null) {
+				frc = m.getGraphics().getFontMetrics().getFontRenderContext();
+			}
+			
+		}
+		
+		
+		private void draw(Graphics g) {
+			this.g = g;
+			frc = g.getFontMetrics().getFontRenderContext();
+			
+			g.setFont(font);
+			
+			//escreve os nomes dos jogadores
+			 
+			g.drawString(player1.getName(), MARGIN, MARGIN + g.getFont().getSize()/2);
+			g.drawString(player2.getName(), rightToLeftBound(XSIZE -MARGIN, player2.getName()), MARGIN + g.getFont().getSize()/2);
+			
+			
+			//escreve as pontuações dos jogadores
+			g.drawString(score(2), XSIZE/2 + MARGIN, MARGIN + font.getSize()/2);
+			g.drawString(score(1), rightToLeftBound(XSIZE/2 - MARGIN, score(1)), MARGIN + g.getFont().getSize()/2);
+			
+			
+		}
+		
+		private int rightToLeftBound(int rightbound, String string) {
+			return rightbound - (int)font.getStringBounds(string, frc).getWidth(); 
+		}
+		
+		private String score(int player) {
+			return Integer.toString(m.playerlist.get(player).getScore());
+		}
 	}
 	
 }

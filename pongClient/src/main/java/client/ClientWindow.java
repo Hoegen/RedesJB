@@ -16,27 +16,38 @@ public class ClientWindow extends JFrame {
 	**/
 	public final static int WINDOW_WIDTH  = 1000;
 	public final static int WINDOW_HEIGHT = 500;
-
+	Match currentmatch = null;
 	public static boolean lastframespacekeydown = false;
 	
 	public ClientWindow() {
+		
 		lastframespacekeydown = ClientWindow.KeyDown.SPACE;
-		Match contents = new Match();
-		super.add(contents);
-		//super.add(new Panel(contents));
+		
+		super.add(new LoginScreen(this));
+		//newMatch("");
+		
 		super.setTitle("PONGIO");
-		contents.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
 		
 		super.setLocation(Util.UserProperties.getScrWid()/2 - WINDOW_WIDTH/2, Util.UserProperties.getScrHei()/2 - WINDOW_HEIGHT/2);
 		super.setResizable(false);
 		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		super.addKeyListener(new ActionListener());
 		super.pack();
-		
 		super.setVisible(true);
 	}
 	
-
+	public Match newMatch(String string) {
+		Match match = new Match();
+		super.add(match);
+		currentmatch = match;
+		match.setPreferredSize(new Dimension(WINDOW_WIDTH, WINDOW_HEIGHT));
+		match.playerlist.get(1).setName(string);
+		this.requestFocus();
+		super.revalidate();
+		
+		
+		return match;
+	}
 	
 	
 	public static class KeyDown{
@@ -53,6 +64,7 @@ public class ClientWindow extends JFrame {
 	}
 	
 	public class ActionListener implements KeyListener {
+		
 
 		@Override
 		public void keyTyped(KeyEvent e) { //do nothing

@@ -59,7 +59,16 @@ public class Player extends GraphicObject {
 			if(id == Connection.Receiver.players.get(i).id) {
 				setSpeed(Connection.Receiver.players.get(i).speed);
 				ypos = Connection.Receiver.players.get(i).ypos;
+				if(score != Connection.Receiver.players.get(i).score) {
+					System.out.println("hurdur");
+					System.out.println("Client: " + score);
+					System.out.println("Server: " + Connection.Receiver.players.get(i).score);
+				}
+				System.out.println("Player number: " + this.id);
+				System.out.println("Client before: " + score);
 				score = Connection.Receiver.players.get(i).score;
+				System.out.println("Client  after: " + score + "\n\n");
+				
 			}
 		}
 	}
