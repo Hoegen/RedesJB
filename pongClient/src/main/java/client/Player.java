@@ -10,7 +10,7 @@ public class Player extends GraphicObject {
 	private char downkey = 'z';
 	private float speed = 0;
 	private String shape = "RECT";
-	int score = 0;
+	private int score = 0;
 	
 	private int id;
 	
@@ -45,13 +45,11 @@ public class Player extends GraphicObject {
 	
 	@Override
 	public void draw(Graphics g) {
-		
 		switch(shape) {
 			case "RECT":
 				g.drawRect(Math.round(xpos - width/2), Math.round(ypos - height/2), width, height);
 				break;
 		}
-		
 	}
 	
 	void serverUpdate() {
@@ -59,15 +57,7 @@ public class Player extends GraphicObject {
 			if(id == Connection.Receiver.players.get(i).id) {
 				setSpeed(Connection.Receiver.players.get(i).speed);
 				ypos = Connection.Receiver.players.get(i).ypos;
-				if(score != Connection.Receiver.players.get(i).score) {
-					System.out.println("hurdur");
-					System.out.println("Client: " + score);
-					System.out.println("Server: " + Connection.Receiver.players.get(i).score);
-				}
-				System.out.println("Player number: " + this.id);
-				System.out.println("Client before: " + score);
 				score = Connection.Receiver.players.get(i).score;
-				System.out.println("Client  after: " + score + "\n\n");
 				
 			}
 		}
@@ -131,8 +121,8 @@ public class Player extends GraphicObject {
 	public int getScore() {
 		return score;
 	}
-	public void setScore(int score) {
-		this.score = score;
+	public void addScore() {
+		score++;
 	}
 	public String getName() {
 		return name;

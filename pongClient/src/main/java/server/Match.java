@@ -17,7 +17,7 @@ public class Match extends JPanel {
 	/**
 	 * 
 	 */
-	public boolean paused = true;
+	private boolean paused = true;
 	private boolean lastframespacekeydown = false;
 	
 	public final static int MARGIN = 20;
@@ -81,7 +81,8 @@ public class Match extends JPanel {
 
 	private void move(double ticks) {
 		if(KeyDown.SPACE && !lastframespacekeydown) {
-			paused = !paused;
+			System.out.println("comando de pausa criado pelo servidor");
+			changePause();
 		}
 		lastframespacekeydown = KeyDown.SPACE;
 		
@@ -91,7 +92,26 @@ public class Match extends JPanel {
 	}
 	
 	public void point() {
+		if(ball.getXpos() < XSIZE/2) {
+			playerlist.get(2).addScore();
+		}else {
+			playerlist.get(1).addScore();
+		}
 		ball.reposition();
+		this.paused = true;
+		System.out.println("Server paused due to point: " + paused);
+		if(!paused) {
+			System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA FILHO DA PUTA!");
+		}
+	}
+	
+	public void changePause() {
+		System.out.println("changePause()");
+		paused = !paused;
+	}
+	
+	public boolean isPaused() {
+		return paused;
 	}
 
 	private void checkCollision() {

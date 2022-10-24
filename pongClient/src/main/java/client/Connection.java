@@ -74,7 +74,8 @@ public class Connection {
 			Elements playerelements = packet.select("player");
 			Element currentplayer;
 			PlayerData playerdata;
-			
+
+			players = new ArrayList<PlayerData>();
 			for(int i = 1; i <= playerelements.size(); i ++) {
 				currentplayer = playerelements.select("#" + i).first();
 				

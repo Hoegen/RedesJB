@@ -42,8 +42,15 @@ public class ServidorFake {
 		Match.KeyDown.comma = keys.contains(",");
 		Match.KeyDown.SPACE = keys.contains(" ");
 		
-			
-		match.paused = match.paused ^ Boolean.valueOf(packet.select("pausecommand").text());
+		if(Boolean.valueOf(packet.select("pausecommand").text())) {
+			System.out.println("comando de pausa recebido");
+			System.out.println("match estava pausada?" + match.isPaused());
+		}
+		
+		if(Boolean.valueOf(packet.select("pausecommand").text())) {
+			System.out.println("receiveMessage");
+			match.changePause();
+		}
 		
 		return "placeholder para uma resposta do sistema";
 	}
@@ -86,7 +93,7 @@ public class ServidorFake {
 		Element match = message.createElement("match");
 		packet.appendChild(match);
 		
-		docbuilder.addElement(message, match, "paused", String.valueOf(ServidorFake.match.paused));
+		docbuilder.addElement(message, match, "paused", String.valueOf(ServidorFake.match.isPaused()));
 		
 		return packet.toString();
 	}

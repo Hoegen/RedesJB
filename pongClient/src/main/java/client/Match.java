@@ -118,7 +118,14 @@ public class Match extends JPanel {
 	}
 	
 	public void point() {
+		if(ball.getXpos() < XSIZE/2) {
+			playerlist.get(2).addScore();
+		}else {
+			playerlist.get(1).addScore();
+		}
 		ball.reposition();
+		paused = true;
+		System.out.println("Client paused due to point: " + paused);
 	}
 
 	void drawField(Graphics g) {
@@ -131,7 +138,6 @@ public class Match extends JPanel {
 	
 	private class GUI{
 		private final int MARGIN = 30;
-		private Graphics g;
 		private Font font = new Font("", Font.PLAIN , 30);
 		FontRenderContext frc;
 		Match m;
@@ -150,7 +156,6 @@ public class Match extends JPanel {
 		
 		
 		private void draw(Graphics g) {
-			this.g = g;
 			frc = g.getFontMetrics().getFontRenderContext();
 			
 			g.setFont(font);

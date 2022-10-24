@@ -14,7 +14,7 @@ public class Geometry {
 		}else if(angulo > 225 && angulo <= 270) {
 			angulo = 225 - (angulo -225)/2;
 		}else if(angulo > 270 && angulo < 315) {
-			angulo = 270 + (angulo - 270)/2;
+			angulo = 360 - (360 - angulo)/2;
 		}
 		return angulo;
 	}

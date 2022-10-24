@@ -60,17 +60,11 @@ public class Ball extends GraphicObject {
 		
 		if(xpos + xSpeed < 0 + DIAMETER/2 && xSpeed < 0) {
 			xbug = true;
-			match.playerlist.get(2).score++;
-		}
-			
-		if(xpos + xSpeed > Match.XSIZE - DIAMETER/2 && xSpeed > 0) {
+		}else if(xpos + xSpeed > Match.XSIZE - DIAMETER/2 && xSpeed > 0) {
 			xbug = true;
-			match.playerlist.get(1).score++;
 		}
 		
 		if(xbug) {
-			dir = Geometry.getDir(-xSpeed, ySpeed, 0, 0);
-			xSpeed = -xSpeed;
 			match.point();
 		}
 	}
@@ -94,7 +88,7 @@ public class Ball extends GraphicObject {
 
 	@Override
 	public void move(double ticks) {
-		if(match.paused) {
+		if(match.isPaused()) {
 			return;
 		}
 			
@@ -117,7 +111,6 @@ public class Ball extends GraphicObject {
 	}
 	
 	void reposition() {
-		match.paused = true;
 		xpos = Match.XSIZE/2;
 		ypos = Match.YSIZE/2;
 		setSpeed();
@@ -141,8 +134,7 @@ public class Ball extends GraphicObject {
 		//lado esquerdo
 		else if(xpos < 0 + DIAMETER/2) {
 			xcollision = true;
-			match.playerlist.get(2).score++;
-			System.out.println("Pontuação jogador 2: " + match.playerlist.get(2).score);
+			System.out.println("Pontuação jogador 2: " + match.playerlist.get(2).getScore());
 			
 			if(xpos < 0) {
 				xpos = 0 + DIAMETER/2;
@@ -152,8 +144,7 @@ public class Ball extends GraphicObject {
 		//lado direito
 		else if(xpos > Match.XSIZE - DIAMETER/2) {
 			xcollision = true;
-			match.playerlist.get(1).score++;
-			System.out.println("Pontuação jogador 1: " + match.playerlist.get(1).score);
+			System.out.println("Pontuação jogador 1: " + match.playerlist.get(1).getScore());
 			
 			if(xpos > Match.XSIZE) {
 				xpos = Match.XSIZE - DIAMETER/2;
@@ -161,7 +152,6 @@ public class Ball extends GraphicObject {
 		}
 		
 		if(xcollision) {
-			//espelha a velocidade horizontalmente
 			match.point();
 		}
 	}

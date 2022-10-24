@@ -9,6 +9,13 @@ public class Player extends GraphicObject {
 	private char upkey = 'a';
 	private char downkey = 'z';
 	private float speed = 0;
+	private String shape = "RECT";
+	private int score = 0;
+	private int id;
+	private String name;
+	
+	
+	
 	public float getSpeed() {
 		return speed;
 	}
@@ -16,12 +23,6 @@ public class Player extends GraphicObject {
 	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
-	private String shape = "RECT";
-	int score = 0;
-	
-	private int id;
-	
-	private String name;
 	
 	public Player(String name, int id) {
 		final int LEFT = 1;
@@ -119,8 +120,8 @@ public class Player extends GraphicObject {
 	public int getScore() {
 		return score;
 	}
-	public void setScore(int score) {
-		this.score = score;
+	public void addScore() {
+		score++;
 	}
 	public String getName() {
 		return name;
