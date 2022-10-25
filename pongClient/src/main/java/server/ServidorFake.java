@@ -23,7 +23,7 @@ public class ServidorFake {
 		
 		while(true) {
 			try {
-				Thread.sleep(20);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

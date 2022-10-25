@@ -84,10 +84,21 @@ public class Match extends JPanel {
 				delta = now - lastTime;
 				ticks = (delta*framespersecond) / 1000000000.0;
 				serverUpdate();
-				connection.sender.send();
+				checkCollision();
 				move(ticks);
+				connection.sender.send();
 				repaint();
 				lastTime = now;
+		}
+	}
+
+	private void checkCollision() {
+		for(int i = 0; i < drawlist.size(); i++) {
+			drawlist.get(i).checkCollision(null);
+			for(int j = i + 1; j < drawlist.size(); j++) {
+				drawlist.get(i).checkCollision(drawlist.get(j));
+				drawlist.get(j).checkCollision(drawlist.get(i));
+			}
 		}
 	}
 
